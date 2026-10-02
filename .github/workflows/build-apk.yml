@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download project
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Java
@@ -26,11 +26,13 @@ jobs:
         with:
           gradle-version: "8.7"
 
-      - name: Create Android project
+      - name: Create Android Project
+        shell: bash
         run: |
           mkdir -p app/src/main/java/com/example/calculator
           mkdir -p app/src/main/assets
           mkdir -p app/src/main/res/values
+          mkdir -p app/src/main/res/drawable
 
           cp index.html app/src/main/assets/index.html
 
@@ -82,21 +84,59 @@ jobs:
 
           cat > app/src/main/res/values/styles.xml <<'EOF'
           <resources>
-              <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+              <style name="AppTheme"
+                  parent="android:style/Theme.Material.Light.NoActionBar">
                   <item name="android:fontFamily">sans</item>
                   <item name="android:colorAccent">#2563eb</item>
+                  <item name="android:navigationBarColor">#111827</item>
+                  <item name="android:statusBarColor">#111827</item>
               </style>
           </resources>
           EOF
 
+          cat > app/src/main/res/drawable/ic_calculator.xml <<'EOF'
+          <vector xmlns:android="http://schemas.android.com/apk/res/android"
+              android:width="108dp"
+              android:height="108dp"
+              android:viewportWidth="108"
+              android:viewportHeight="108">
+
+              <path
+                  android:fillColor="#2563EB"
+                  android:pathData="M20,8 L88,8 Q100,8 100,20 L100,88 Q100,100 88,100 L20,100 Q8,100 8,88 L8,20 Q8,8 20,8Z" />
+
+              <path
+                  android:fillColor="#FFFFFF"
+                  android:pathData="M28,22 L80,22 Q84,22 84,26 L84,40 Q84,44 80,44 L28,44 Q24,44 24,40 L24,26 Q24,22 28,22Z" />
+
+              <path
+                  android:fillColor="#FFFFFF"
+                  android:pathData="M25,52 L35,52 L35,62 L25,62Z M42,52 L52,52 L52,62 L42,62Z M59,52 L69,52 L69,62 L59,62Z M76,52 L86,52 L86,62 L76,62Z" />
+
+              <path
+                  android:fillColor="#FFFFFF"
+                  android:pathData="M25,69 L35,69 L35,79 L25,79Z M42,69 L52,69 L52,79 L42,79Z M59,69 L69,69 L69,79 L59,79Z M76,69 L86,69 L86,79 L76,79Z" />
+
+              <path
+                  android:fillColor="#FFFFFF"
+                  android:pathData="M25,86 L35,86 L35,96 L25,96Z M42,86 L52,86 L52,96 L42,96Z M59,86 L69,86 L69,96 L59,96Z M76,86 L86,86 L86,96 L76,96Z" />
+
+          </vector>
+          EOF
+
           cat > app/src/main/AndroidManifest.xml <<'EOF'
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
               <application
                   android:theme="@style/AppTheme"
-                  android:label="Калькулятор">
+                  android:label="CALCULATOR"
+                  android:icon="@drawable/ic_calculator"
+                  android:allowBackup="true"
+                  android:supportsRtl="true">
 
                   <activity
                       android:name=".MainActivity"
+                      android:screenOrientation="portrait"
                       android:exported="true">
 
                       <intent-filter>
@@ -105,7 +145,9 @@ jobs:
                       </intent-filter>
 
                   </activity>
+
               </application>
+
           </manifest>
           EOF
 
