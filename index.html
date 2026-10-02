@@ -31,9 +31,15 @@ body {
 .title {
     color: white;
     text-align: center;
-    font-size: 24px;
+    font-size: 25px;
     margin-bottom: 15px;
     font-weight: bold;
+}
+
+.subtitle {
+    color: #9ca3af;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 #display {
@@ -64,7 +70,6 @@ button {
     color: white;
     font-size: 22px;
     font-weight: bold;
-    cursor: pointer;
 }
 
 button:active {
@@ -93,42 +98,44 @@ button:active {
 
 <div class="calculator">
 
-<div class="title">КАЛЬКУЛЯТОР</div>
+    <div class="title">🧮 КАЛЬКУЛЯТОР</div>
+    <div class="subtitle">RUSTAM CALCULATOR</div>
 
-<input id="display" value="0" readonly>
+    <input id="display" value="0" readonly>
 
-<div class="buttons">
+    <div class="buttons">
 
-<button class="clear" onclick="clearDisplay()">C</button>
-<button onclick="backspace()">⌫</button>
-<button class="special" onclick="add('%')">%</button>
-<button class="operator" onclick="add('/')">÷</button>
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button onclick="backspace()">⌫</button>
+        <button class="special" onclick="add('%')">%</button>
+        <button class="operator" onclick="add('/')">÷</button>
 
-<button class="special" onclick="square()">x²</button>
-<button class="special" onclick="sqrt()">√</button>
-<button onclick="add('(')">(</button>
-<button onclick="add(')')">)</button>
+        <button class="special" onclick="square()">x²</button>
+        <button class="special" onclick="sqrt()">√</button>
+        <button onclick="add('(')">(</button>
+        <button onclick="add(')')">)</button>
 
-<button onclick="add('7')">7</button>
-<button onclick="add('8')">8</button>
-<button onclick="add('9')">9</button>
-<button class="operator" onclick="add('*')">×</button>
+        <button onclick="add('7')">7</button>
+        <button onclick="add('8')">8</button>
+        <button onclick="add('9')">9</button>
+        <button class="operator" onclick="add('*')">×</button>
 
-<button onclick="add('4')">4</button>
-<button onclick="add('5')">5</button>
-<button onclick="add('6')">6</button>
-<button class="operator" onclick="add('-')">−</button>
+        <button onclick="add('4')">4</button>
+        <button onclick="add('5')">5</button>
+        <button onclick="add('6')">6</button>
+        <button class="operator" onclick="add('-')">−</button>
 
-<button onclick="add('1')">1</button>
-<button onclick="add('2')">2</button>
-<button onclick="add('3')">3</button>
-<button class="operator" onclick="add('+')">+</button>
+        <button onclick="add('1')">1</button>
+        <button onclick="add('2')">2</button>
+        <button onclick="add('3')">3</button>
+        <button class="operator" onclick="add('+')">+</button>
 
-<button onclick="add('0')">0</button>
-<button onclick="add('.')">.</button>
-<button class="equal" onclick="calculate()">=</button>
+        <button onclick="add('0')">0</button>
+        <button onclick="add('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
 
-</div>
+    </div>
+
 </div>
 
 <script>
@@ -136,6 +143,7 @@ button:active {
 let display = document.getElementById("display");
 
 function add(value) {
+
     if (display.value === "0" || display.value === "Хато") {
         display.value = value;
     } else {
@@ -148,6 +156,7 @@ function clearDisplay() {
 }
 
 function backspace() {
+
     display.value = display.value.slice(0, -1);
 
     if (display.value === "") {
@@ -156,44 +165,45 @@ function backspace() {
 }
 
 function square() {
-    try {
-        let number = Number(display.value);
 
-        if (isNaN(number)) {
-            display.value = "Хато";
-        } else {
-            display.value = number * number;
-        }
-    } catch {
+    let number = Number(display.value);
+
+    if (isNaN(number)) {
         display.value = "Хато";
+    } else {
+        display.value = number * number;
     }
 }
 
 function sqrt() {
-    try {
-        let number = Number(display.value);
 
-        if (number < 0 || isNaN(number)) {
-            display.value = "Хато";
-        } else {
-            display.value = Math.sqrt(number);
-        }
-    } catch {
+    let number = Number(display.value);
+
+    if (number < 0 || isNaN(number)) {
         display.value = "Хато";
+    } else {
+        display.value = Math.sqrt(number);
     }
 }
 
 function calculate() {
+
     try {
-        let expression = display.value.replace(/%/g, "/100");
-        let result = Function("return " + expression)();
+
+        let expression =
+            display.value.replace(/%/g, "/100");
+
+        let result =
+            Function("return " + expression)();
 
         if (!isFinite(result)) {
             display.value = "Хато";
         } else {
             display.value = result;
         }
+
     } catch {
+
         display.value = "Хато";
     }
 }
