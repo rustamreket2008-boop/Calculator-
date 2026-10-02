@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.calculator {
+    width: 320px;
+    padding: 20px;
+    border-radius: 25px;
+    background: #222;
+}
+
+#display {
+    width: 100%;
+    box-sizing: border-box;
+    height: 75px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 15px;
+    background: #333;
+    color: white;
+    font-size: 32px;
+    text-align: right;
+    padding: 10px;
+  }
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    height: 60px;
+    border: none;
+    border-radius: 15px;
+    font-size: 22px;
+    background: #444;
+    color: white;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.operator {
+    background: #555;
+}
+
+.equal {
+    background: #777;
+}
+
+.clear {
+    background: #333;
+}
+</style>
+</head>
+  <body>
+
+<div class="calculator">
+
+<input id="display" type="text" value="0" readonly>
+
+<div class="buttons">
+
+<button class="clear" onclick="clearDisplay()">C</button>
+<button onclick="backspace()">⌫</button>
+<button onclick="add('%')">%</button>
+<button class="operator" onclick="add('/')">÷</button>
+
+<button onclick="add('7')">7</button>
+<button onclick="add('8')">8</button>
+<button onclick="add('9')">9</button>
+<button class="operator" onclick="add('*')">×</button>
+
+<button onclick="add('4')">4</button>
+<button onclick="add('5')">5</button>
+<button onclick="add('6')">6</button>
+<button class="operator" onclick="add('-')">−</button>
+
+<button onclick="add('1')">1</button>
+<button onclick="add('2')">2</button>
+<button onclick="add('3')">3</button>
+<button class="operator" onclick="add('+')">+</button>
+
+<button onclick="add('0')">0</button>
+<button onclick="add('.')">.</button>
+<button class="equal" onclick="calculate()">=</button>
+
+</div>
+</div>
+    <script>
+let display = document.getElementById("display");
+
+function add(value) {
+    if (display.value === "0") {
+        display.value = value;
+    } else {
+        display.value += value;
+    }
+}
+
+function clearDisplay() {
+    display.value = "0";
+}
+
+function backspace() {
+    display.value = display.value.slice(0, -1);
+
+    if (display.value === "") {
+        display.value = "0";
+    }
+}
+
+function calculate() {
+    try {
+        let expression = display.value.replace(/%/g, "/100");
+        let result = Function("return " + expression)();
+
+        if (!isFinite(result)) {
+            display.value = "Хато";
+        } else {
+            display.value = result;
+        }
+    } catch {
+        display.value = "Хато";
+    }
+}
+</script>
+
+</body>
+</html>
+}
