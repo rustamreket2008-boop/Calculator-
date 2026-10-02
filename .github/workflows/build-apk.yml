@@ -1,24 +1,36 @@
-name: Build APK
+name: Build Calculator APK
 
 on:
   workflow_dispatch:
   push:
     paths:
       - "index.html"
+      - ".github/workflows/build-apk.yml"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Download project
         uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
 
       - name: Create Android project
         run: |
           mkdir -p app/src/main/java/com/example/calculator
           mkdir -p app/src/main/assets
-          mkdir -p app/src/main/res/mipmap-hdpi
+          mkdir -p app/src/main/res/values
 
           cp index.html app/src/main/assets/index.html
 
@@ -40,7 +52,7 @@ jobs:
           }
 
           rootProject.name = "Calculator"
-          include ":app"
+          include(":app")
           EOF
 
           cat > build.gradle <<'EOF'
@@ -68,25 +80,6 @@ jobs:
           }
           EOF
 
-          cat > app/src/main/AndroidManifest.xml <<'EOF'
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application
-                  android:theme="@style/AppTheme"
-                  android:label="Калькулятор">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN"/>
-                          <category android:name="android.intent.category.LAUNCHER"/>
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-
-          mkdir -p app/src/main/res/values
-
           cat > app/src/main/res/values/styles.xml <<'EOF'
           <resources>
               <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
@@ -96,32 +89,52 @@ jobs:
           </resources>
           EOF
 
+          cat > app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <application
+                  android:theme="@style/AppTheme"
+                  android:label="Калькулятор">
+
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true">
+
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN"/>
+                          <category android:name="android.intent.category.LAUNCHER"/>
+                      </intent-filter>
+
+                  </activity>
+              </application>
+          </manifest>
+          EOF
+
           cat > app/src/main/java/com/example/calculator/MainActivity.java <<'EOF'
           package com.example.calculator;
 
           import android.app.Activity;
           import android.os.Bundle;
-          import android.webkit.WebView;
           import android.webkit.WebSettings;
+          import android.webkit.WebView;
 
           public class MainActivity extends Activity {
+
               @Override
               protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
 
                   WebView webView = new WebView(this);
+
                   WebSettings settings = webView.getSettings();
                   settings.setJavaScriptEnabled(true);
                   settings.setDomStorageEnabled(true);
 
                   webView.loadUrl("file:///android_asset/index.html");
+
                   setContentView(webView);
               }
           }
           EOF
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
 
       - name: Build APK
         run: gradle :app:assembleDebug
@@ -131,3 +144,4 @@ jobs:
         with:
           name: calculator-apk
           path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
