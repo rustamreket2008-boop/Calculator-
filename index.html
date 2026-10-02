@@ -21,7 +21,7 @@ body {
 }
 
 .calculator {
-    width: 340px;
+    width: 350px;
     padding: 20px;
     border-radius: 30px;
     background: #151515;
@@ -65,7 +65,6 @@ button {
     font-size: 22px;
     font-weight: bold;
     cursor: pointer;
-    transition: .1s;
 }
 
 button:active {
@@ -105,6 +104,11 @@ button:active {
 <button class="special" onclick="add('%')">%</button>
 <button class="operator" onclick="add('/')">÷</button>
 
+<button class="special" onclick="square()">x²</button>
+<button class="special" onclick="sqrt()">√</button>
+<button onclick="add('(')">(</button>
+<button onclick="add(')')">)</button>
+
 <button onclick="add('7')">7</button>
 <button onclick="add('8')">8</button>
 <button onclick="add('9')">9</button>
@@ -128,27 +132,7 @@ button:active {
 </div>
 
 <script>
-    function square() {
-    try {
-        display.value = Math.pow(Number(display.value), 2);
-    } catch {
-        display.value = "Хато";
-    }
-}
 
-function sqrt() {
-    try {
-        let number = Number(display.value);
-
-        if (number < 0) {
-            display.value = "Хато";
-        } else {
-            display.value = Math.sqrt(number);
-        }
-    } catch {
-        display.value = "Хато";
-    }
-}
 let display = document.getElementById("display");
 
 function add(value) {
@@ -171,6 +155,34 @@ function backspace() {
     }
 }
 
+function square() {
+    try {
+        let number = Number(display.value);
+
+        if (isNaN(number)) {
+            display.value = "Хато";
+        } else {
+            display.value = number * number;
+        }
+    } catch {
+        display.value = "Хато";
+    }
+}
+
+function sqrt() {
+    try {
+        let number = Number(display.value);
+
+        if (number < 0 || isNaN(number)) {
+            display.value = "Хато";
+        } else {
+            display.value = Math.sqrt(number);
+        }
+    } catch {
+        display.value = "Хато";
+    }
+}
+
 function calculate() {
     try {
         let expression = display.value.replace(/%/g, "/100");
@@ -185,6 +197,7 @@ function calculate() {
         display.value = "Хато";
     }
 }
+
 </script>
 
 </body>
