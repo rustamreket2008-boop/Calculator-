@@ -21,6 +21,13 @@ body {
     padding: 20px;
     border-radius: 25px;
     background: #222;
+    box-shadow: 0 10px 30px #000;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    margin-top: 0;
 }
 
 #display {
@@ -35,7 +42,7 @@ body {
     font-size: 32px;
     text-align: right;
     padding: 10px;
-  }
+}
 
 .buttons {
     display: grid;
@@ -69,9 +76,12 @@ button:active {
 }
 </style>
 </head>
-  <body>
+
+<body>
 
 <div class="calculator">
+
+<h2>Калькулятор</h2>
 
 <input id="display" type="text" value="0" readonly>
 
@@ -103,7 +113,8 @@ button:active {
 
 </div>
 </div>
-    <script>
+
+<script>
 let display = document.getElementById("display");
 
 function add(value) {
@@ -144,4 +155,3 @@ function calculate() {
 
 </body>
 </html>
-}
