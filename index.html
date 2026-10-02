@@ -128,6 +128,27 @@ button:active {
 </div>
 
 <script>
+    function square() {
+    try {
+        display.value = Math.pow(Number(display.value), 2);
+    } catch {
+        display.value = "Хато";
+    }
+}
+
+function sqrt() {
+    try {
+        let number = Number(display.value);
+
+        if (number < 0) {
+            display.value = "Хато";
+        } else {
+            display.value = Math.sqrt(number);
+        }
+    } catch {
+        display.value = "Хато";
+    }
+}
 let display = document.getElementById("display");
 
 function add(value) {
